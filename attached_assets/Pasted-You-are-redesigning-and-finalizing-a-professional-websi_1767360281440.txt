@@ -1,0 +1,141 @@
+You are redesigning and finalizing a professional website called TechForex.
+This website must look like a real, production-level trading platform, not a demo or AI-generated layout.
+
+The final output should be client-select ready at first glance.
+
+🎨 COLOR & VISUAL STYLE (IMPORTANT)
+
+– Use trading-industry standard colors only
+– Colors should feel familiar to traders (like real trading platforms)
+– Avoid full dark themes
+– Avoid flashy or over-creative colors
+– Overall look should be:
+– Clean
+– Professional
+– Financial
+– Trust-worthy
+
+Choose colors naturally used in stock market, forex, and trading websites.
+Do NOT use random color combinations.
+
+🧭 HEADER & FOOTER
+
+– Header and footer must have subtle background color fill
+– Not too dark, not pure white
+– Header should visually separate from hero section
+– Footer should feel solid and professional
+– Clean navigation and readable text
+
+🚀 HERO SECTION (HIGH IMPACT)
+
+– This section must instantly communicate “professional trading platform”
+– Use high-quality background:
+– Trading dashboards
+– Candlestick charts
+– Market screens
+
+– Strong headline related to smart trading & real market insights
+– Supporting sub-text explaining:
+– Live market prices
+– Trading tools
+– Trading education
+
+– Clear primary & secondary CTA buttons
+– Trust indicators like:
+– Real-time data
+– Secure payments
+– Educational platform
+
+❌ Remove any scroll indicators or unnecessary hero animations
+
+📐 SECTION SPACING & FLOW
+
+– Remove unnecessary blank gaps between sections
+– Ensure smooth flow from Hero → About → Other sections
+– Use subtle background transitions between sections where needed
+
+🧱 CARDS & CONTENT VISIBILITY (VERY IMPORTANT)
+
+– All cards across the website must be clearly visible
+– Cards should NOT blend into background
+– Use:
+– Soft borders
+– Light shadows
+– Proper padding
+– Rounded corners
+
+This applies to:
+– About section cards
+– Live price cards
+– Tools cards
+– Books cards
+– Audience / feature cards
+
+🧠 CONTENT QUALITY (AUTO-IMPROVE)
+
+– Rewrite existing content to be:
+– More professional
+– More concise
+– Value-focused
+
+– Add additional content where required on your own to make the website feel complete, informative, and premium
+– Content should explain:
+– What the platform offers
+– Who it is for
+– Why traders should trust it
+
+Do not keep content generic. Make it trading-relevant and practical.
+
+📊 LIVE MARKET DATA SECTION
+
+– Display live prices for major assets:
+– Crypto
+– Forex
+– Commodities
+– Show USD and INR
+– Clear green/red movement indicators
+– “Live” status should be visible
+– Section should feel dynamic but clean
+
+🛠 TOOLS SECTION
+
+– Showcase trading tools used by real traders
+– Present tools in structured cards
+– Explain benefit of each tool in one clear line
+
+📘 BOOKS / DIGITAL PRODUCTS
+
+– Present trading books professionally
+– Clear pricing
+– Clear benefits
+– Strong Buy Now buttons
+– Include a clean delivery information note:
+– If PDF is not received, user can contact support with payment proof
+
+👥 TRUST & CREDIBILITY
+
+– Add sections such as:
+– Who this platform is for
+– Why traders choose TechForex
+– Frequently asked questions
+
+– Content should build confidence, not hype
+
+📱 RESPONSIVENESS
+
+– Website must look excellent on:
+– Mobile
+– Tablet
+– Desktop
+– Buttons must be easy to tap
+– No clutter on small screens
+
+🎯 FINAL GOAL
+
+The final website should feel like:
+– A real trading brand
+– A trusted educational platform
+– A business that clients are confident to choose
+
+When a client sees this website, the reaction should be:
+“Yes, this looks professional. Let’s go with this.”
