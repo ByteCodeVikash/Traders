@@ -27,9 +27,10 @@ export function Navbar() {
         <div className="flex h-16 items-center justify-between">
           <div className="flex items-center gap-2">
             <Link href="/" className="flex items-center gap-2">
-              <Link href="/" className="flex items-center gap-2">
-                <img src="/techforex_logo.webp" alt="TechForex" className="h-10 w-auto object-contain" />
-              </Link>
+              <img src="/techforex_logo.webp" alt="TechForex" className="h-10 w-auto object-contain" />
+              <span className="text-xl font-bold tracking-tight text-primary font-display">
+                TechForex
+              </span>
             </Link>
           </div>
 

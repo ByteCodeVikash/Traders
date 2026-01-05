@@ -447,6 +447,7 @@ export default function Home() {
             <div className="col-span-2">
               <div className="flex items-center gap-2 mb-6">
                 <img src="/techforex_logo.webp" alt="TechForex" className="h-12 w-auto object-contain" />
+                <span className="text-2xl font-black text-slate-900 tracking-tight">TECHFOREX</span>
               </div>
               <p className="text-slate-500 text-sm max-w-md leading-relaxed mb-8">
                 TechForex is a leading global multi-asset broker providing traders across the world with access to high-tier technology and raw market liquidity.
