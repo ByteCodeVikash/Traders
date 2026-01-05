@@ -41,19 +41,19 @@ export default function Markets() {
     return () => clearInterval(interval);
   }, []);
 
-  const filteredItems = activeCategory === "All" 
-    ? items 
+  const filteredItems = activeCategory === "All"
+    ? items
     : items.filter(item => item.category === activeCategory);
 
   return (
     <div className="min-h-screen bg-slate-50">
       <MarketTicker />
-      
+
       <div className="bg-white border-b border-slate-200">
         <div className="container mx-auto px-4 py-12">
           <h1 className="text-3xl font-bold font-display text-slate-900 mb-4">Live Market Data</h1>
           <p className="text-slate-600 max-w-2xl">
-            Real-time quotes for major currency pairs, cryptocurrencies, indices, and commodities. 
+            Real-time quotes for major currency pairs, cryptocurrencies, indices, and commodities.
             Prices are indicative and for educational purposes only.
           </p>
         </div>
@@ -66,11 +66,10 @@ export default function Markets() {
             <button
               key={cat}
               onClick={() => setActiveCategory(cat)}
-              className={`px-4 py-2 rounded-full text-sm font-medium transition-colors ${
-                activeCategory === cat 
-                  ? "bg-primary text-white shadow-md" 
+              className={`px-4 py-2 rounded-full text-sm font-medium transition-colors ${activeCategory === cat
+                  ? "bg-primary text-white shadow-md"
                   : "bg-white text-slate-600 hover:bg-slate-100 border border-slate-200"
-              }`}
+                }`}
             >
               {cat}
             </button>
@@ -80,7 +79,7 @@ export default function Markets() {
         {/* Market Cards */}
         <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
           {filteredItems.map((item) => (
-            <div key={item.id} className="bg-white rounded-xl border border-slate-200 p-6 shadow-sm hover:shadow-md transition-shadow">
+            <div key={item.id} className="card-professional p-6">
               <div className="flex justify-between items-start mb-4">
                 <div>
                   <h3 className="text-lg font-bold text-slate-900">{item.symbol}</h3>
@@ -91,7 +90,7 @@ export default function Markets() {
                   {Math.abs(item.change).toFixed(2)}%
                 </div>
               </div>
-              
+
               <div className="flex items-baseline gap-1 mb-6">
                 <span className="text-3xl font-bold font-mono text-slate-900">
                   {item.price.toFixed(item.category === 'Forex' && !item.symbol.includes('JPY') ? 4 : 2)}

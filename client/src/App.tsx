@@ -11,6 +11,7 @@ import Home from "@/pages/Home";
 import Markets from "@/pages/Markets";
 import Tools from "@/pages/Tools";
 import Education from "@/pages/Education";
+import Books from "@/pages/Books";
 import Contact from "@/pages/Contact";
 import NotFound from "@/pages/not-found";
 
@@ -24,6 +25,7 @@ function Router() {
           <Route path="/markets" component={Markets} />
           <Route path="/tools" component={Tools} />
           <Route path="/education" component={Education} />
+          <Route path="/books" component={Books} />
           <Route path="/contact" component={Contact} />
           <Route component={NotFound} />
         </Switch>

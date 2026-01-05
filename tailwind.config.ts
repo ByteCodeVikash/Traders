@@ -10,6 +10,12 @@ export default {
         md: ".375rem", /* 6px */
         sm: ".1875rem", /* 3px */
       },
+      boxShadow: {
+        "professional": "0 8px 30px rgba(0, 0, 0, 0.08)",
+        "professional-hover": "0 14px 40px rgba(0, 0, 0, 0.12)",
+        "trading": "0 4px 20px -4px rgba(0, 0, 0, 0.05)",
+        "trading-hover": "0 8px 30px -4px rgba(0, 0, 0, 0.08)",
+      },
       colors: {
         // Flat / base colors (regular buttons)
         background: "hsl(var(--background) / <alpha-value>)",
@@ -89,6 +95,12 @@ export default {
         display: ["var(--font-display)"],
         body: ["var(--font-body)"],
       },
+
+      animation: {
+        "accordion-down": "accordion-down 0.2s ease-out",
+        "accordion-up": "accordion-up 0.2s ease-out",
+        blob: "blob 7s infinite",
+      },
       keyframes: {
         "accordion-down": {
           from: { height: "0" },
@@ -98,10 +110,20 @@ export default {
           from: { height: "var(--radix-accordion-content-height)" },
           to: { height: "0" },
         },
-      },
-      animation: {
-        "accordion-down": "accordion-down 0.2s ease-out",
-        "accordion-up": "accordion-up 0.2s ease-out",
+        blob: {
+          "0%": {
+            transform: "translate(0px, 0px) scale(1)",
+          },
+          "33%": {
+            transform: "translate(30px, -50px) scale(1.1)",
+          },
+          "66%": {
+            transform: "translate(-20px, 20px) scale(0.9)",
+          },
+          "100%": {
+            transform: "translate(0px, 0px) scale(1)",
+          },
+        },
       },
     },
   },

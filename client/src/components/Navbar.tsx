@@ -1,7 +1,13 @@
 import { Link, useLocation } from "wouter";
 import { useState } from "react";
-import { Menu, X, BarChart2 } from "lucide-react";
+import { Menu, X, BarChart2, BookOpen, GraduationCap, ChevronDown } from "lucide-react";
 import { cn } from "@/lib/utils";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
 
 export function Navbar() {
   const [isOpen, setIsOpen] = useState(false);
@@ -11,41 +17,50 @@ export function Navbar() {
     { href: "/", label: "Home" },
     { href: "/markets", label: "Markets" },
     { href: "/tools", label: "Tools" },
-    { href: "/education", label: "Education" },
+    // Education is handled separately
     { href: "/contact", label: "Contact" },
   ];
 
   return (
-    <header className="sticky top-0 z-50 w-full border-b bg-white/95 backdrop-blur supports-[backdrop-filter]:bg-white/60">
+    <header className="sticky top-0 z-50 w-full border-b bg-slate-50/95 backdrop-blur supports-[backdrop-filter]:bg-slate-50/60">
       <div className="container mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex h-16 items-center justify-between">
           <div className="flex items-center gap-2">
             <Link href="/" className="flex items-center gap-2">
-              <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-primary text-white">
-                <BarChart2 className="h-5 w-5" />
-              </div>
-              <span className="text-xl font-bold tracking-tight text-primary font-display">
-                TechForex
-              </span>
+              <Link href="/" className="flex items-center gap-2">
+                <img src="/techforex_logo.webp" alt="TechForex" className="h-10 w-auto object-contain" />
+              </Link>
             </Link>
           </div>
 
           {/* Desktop Nav */}
           <nav className="hidden md:flex items-center gap-8">
-            {links.map((link) => (
-              <Link
-                key={link.href}
-                href={link.href}
-                className={cn(
-                  "text-sm font-medium transition-colors hover:text-primary",
-                  location === link.href ? "text-primary font-semibold" : "text-slate-600"
-                )}
-              >
-                {link.label}
-              </Link>
-            ))}
+            <Link href="/" className={cn("nav-link", location === "/" && "text-primary font-semibold")}>Home</Link>
+            <Link href="/markets" className={cn("nav-link", location === "/markets" && "text-primary font-semibold")}>Markets</Link>
+            <Link href="/tools" className={cn("nav-link", location === "/tools" && "text-primary font-semibold")}>Tools</Link>
+
+            <DropdownMenu>
+              <DropdownMenuTrigger className="flex items-center gap-1 nav-link outline-none">
+                Education <ChevronDown className="w-4 h-4" />
+              </DropdownMenuTrigger>
+              <DropdownMenuContent>
+                <Link href="/education">
+                  <DropdownMenuItem className="cursor-pointer">
+                    <GraduationCap className="w-4 h-4 mr-2" /> Center Home
+                  </DropdownMenuItem>
+                </Link>
+                <Link href="/books">
+                  <DropdownMenuItem className="cursor-pointer">
+                    <BookOpen className="w-4 h-4 mr-2" /> Books & Guides
+                  </DropdownMenuItem>
+                </Link>
+              </DropdownMenuContent>
+            </DropdownMenu>
+
+            <Link href="/contact" className={cn("nav-link", location === "/contact" && "text-primary font-semibold")}>Contact</Link>
+
             <Link href="/education">
-              <button className="rounded-full bg-primary px-5 py-2 text-sm font-semibold text-white shadow-md hover:bg-blue-700 transition-colors">
+              <button className="btn-primary py-2 px-5 text-sm shadow-md">
                 Get Started
               </button>
             </Link>
@@ -65,22 +80,23 @@ export function Navbar() {
       {isOpen && (
         <div className="md:hidden border-t bg-white">
           <div className="space-y-1 px-4 py-4">
-            {links.map((link) => (
-              <Link
-                key={link.href}
-                href={link.href}
-                onClick={() => setIsOpen(false)}
-                className={cn(
-                  "block px-3 py-2 text-base font-medium rounded-md hover:bg-slate-50",
-                  location === link.href ? "text-primary bg-blue-50" : "text-slate-600"
-                )}
-              >
-                {link.label}
-              </Link>
-            ))}
+            <Link href="/" onClick={() => setIsOpen(false)} className="block px-3 py-2 text-base font-medium text-slate-600 hover:bg-slate-50 rounded-md">Home</Link>
+            <Link href="/markets" onClick={() => setIsOpen(false)} className="block px-3 py-2 text-base font-medium text-slate-600 hover:bg-slate-50 rounded-md">Markets</Link>
+            <Link href="/tools" onClick={() => setIsOpen(false)} className="block px-3 py-2 text-base font-medium text-slate-600 hover:bg-slate-50 rounded-md">Tools</Link>
+
+            <div className="px-3 py-2">
+              <div className="text-sm font-semibold text-slate-900 mb-2">Education</div>
+              <div className="pl-4 space-y-2 border-l-2 border-slate-100">
+                <Link href="/education" onClick={() => setIsOpen(false)} className="block text-sm text-slate-600">Center Home</Link>
+                <Link href="/books" onClick={() => setIsOpen(false)} className="block text-sm text-slate-600">Books & Guides</Link>
+              </div>
+            </div>
+
+            <Link href="/contact" onClick={() => setIsOpen(false)} className="block px-3 py-2 text-base font-medium text-slate-600 hover:bg-slate-50 rounded-md">Contact</Link>
+
             <div className="pt-4">
               <Link href="/education" onClick={() => setIsOpen(false)}>
-                <button className="w-full rounded-md bg-primary px-3 py-3 text-base font-semibold text-white shadow-sm">
+                <button className="w-full btn-primary text-base">
                   Get Started
                 </button>
               </Link>

@@ -85,7 +85,12 @@
     font-family: var(--font-body);
   }
 
-  h1, h2, h3, h4, h5, h6 {
+  h1,
+  h2,
+  h3,
+  h4,
+  h5,
+  h6 {
     font-family: var(--font-display);
     @apply font-bold tracking-tight text-slate-900;
   }
@@ -94,19 +99,23 @@
 /* Custom Utilities for Trading Aesthetics */
 @layer components {
   .trading-card {
-    @apply bg-white rounded-xl border border-slate-200 shadow-sm transition-all duration-300 hover:shadow-md hover:border-slate-300;
+    @apply bg-white rounded-xl border border-slate-200/60 shadow-trading transition-all duration-300 hover:shadow-trading-hover hover:border-blue-100 hover:-translate-y-1;
   }
-  
+
+  .card-professional {
+    @apply bg-white rounded-2xl border border-slate-200 shadow-professional transition-all duration-300 hover:shadow-professional-hover hover:border-slate-300 hover:-translate-y-1;
+  }
+
   .nav-link {
     @apply text-sm font-medium text-slate-600 hover:text-primary transition-colors;
   }
 
   .btn-primary {
-    @apply bg-primary text-white hover:bg-blue-700 shadow-lg shadow-blue-900/10 px-6 py-3 rounded-lg font-semibold transition-all duration-200 hover:-translate-y-0.5 active:translate-y-0;
+    @apply bg-primary text-white hover:bg-blue-700 shadow-md shadow-blue-900/20 px-6 py-3 rounded-lg font-bold tracking-wide transition-all duration-200 hover:shadow-xl hover:shadow-blue-900/30 hover:-translate-y-0.5 active:translate-y-0 active:scale-[0.98] active:shadow-sm border border-transparent;
   }
 
   .btn-secondary {
-    @apply bg-white text-slate-700 border border-slate-200 hover:bg-slate-50 hover:border-slate-300 px-6 py-3 rounded-lg font-semibold transition-all duration-200 shadow-sm hover:shadow-md;
+    @apply bg-white text-slate-800 border-2 border-slate-200 hover:border-slate-300 hover:bg-slate-50 px-6 py-3 rounded-lg font-bold tracking-wide transition-all duration-200 shadow-sm hover:shadow-md hover:-translate-y-0.5 active:translate-y-0 active:scale-[0.98];
   }
 
   .section-padding {
@@ -116,8 +125,13 @@
 
 /* Ticker Animation */
 @keyframes ticker {
-  0% { transform: translateX(0); }
-  100% { transform: translateX(-50%); }
+  0% {
+    transform: translateX(0);
+  }
+
+  100% {
+    transform: translateX(-50%);
+  }
 }
 
 .animate-ticker {
