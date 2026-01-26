@@ -1,49 +1,27 @@
-import { useState, useEffect } from "react";
-import { TrendingUp, TrendingDown, DollarSign } from "lucide-react";
+import { TrendingUp, TrendingDown } from "lucide-react";
 import { cn } from "@/lib/utils";
-
-interface PriceData {
-    symbol: string;
-    name: string;
-    priceUSD: number;
-    priceINR: number;
-    change: number;
-}
-
-const INITIAL_DATA: PriceData[] = [
-    { symbol: "ETH", name: "Ethereum", priceUSD: 3450.20, priceINR: 286366, change: 2.4 },
-    { symbol: "XAU", name: "Gold (oz)", priceUSD: 2350.50, priceINR: 195091, change: 0.8 },
-    { symbol: "XAG", name: "Silver (oz)", priceUSD: 28.45, priceINR: 2361, change: -0.5 },
-    { symbol: "HG", name: "Copper", priceUSD: 4.25, priceINR: 352, change: 1.2 },
-    { symbol: "USDT", name: "Tether", priceUSD: 1.00, priceINR: 83.50, change: 0.01 },
-    { symbol: "USD", name: "US Dollar", priceUSD: 1.00, priceINR: 83.45, change: 0.05 },
-];
+import { useMarketData } from "@/hooks/use-market-data";
 
 export function LiveTicker() {
-    const [prices, setPrices] = useState<PriceData[]>(INITIAL_DATA);
+    const { data: prices, loading } = useMarketData({ refreshInterval: 5000 });
 
-    useEffect(() => {
-        const interval = setInterval(() => {
-            setPrices(current => current.map(item => {
-                const volatility = item.priceUSD * 0.0005; // 0.05% volatility
-                const changeAmount = (Math.random() - 0.5) * volatility;
-                const newPriceUSD = item.priceUSD + changeAmount;
-                const newPriceINR = item.priceINR + (changeAmount * 83); // Approx conversion update
+    const displayPrices = loading || prices.length === 0 ? [
+        // Fallback skeleton or initial loading state if needed, or just empty
+        { symbol: "Loading...", price: 0, change: 0, name: "" }
+    ] : prices;
 
-                // Update change percentage slightly
-                const newChange = item.change + (Math.random() - 0.5) * 0.1;
-
-                return {
-                    ...item,
-                    priceUSD: newPriceUSD,
-                    priceINR: newPriceINR,
-                    change: newChange
-                };
-            }));
-        }, 2000); // 2 second update rate
-
-        return () => clearInterval(interval);
-    }, []);
+    // Helper to format price based on type/value
+    const formatPrice = (symbol: string, price: number) => {
+        if (price === 0) return "--";
+        // Crypto/Forex logic
+        if (symbol.includes("BTC") || symbol.includes("ETH")) {
+            return "$" + price.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+        }
+        if (price < 10) {
+            return "$" + price.toLocaleString(undefined, { minimumFractionDigits: 4, maximumFractionDigits: 4 });
+        }
+        return "$" + price.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+    };
 
     return (
         <div className="w-full bg-[#0A1628] border-b border-white/10 overflow-hidden">
@@ -55,19 +33,18 @@ export function LiveTicker() {
 
                 <div className="flex-1 overflow-hidden ml-8 mask-linear-fade">
                     <div className="flex gap-8 animate-ticker hover:[animation-play-state:paused] w-max">
-                        {/* Double the list for seamless loop */}
-                        {[...prices, ...prices].map((item, i) => (
+                        {/* Double the list for seamless loop - only if we have data */}
+                        {(prices.length > 0 ? [...prices, ...prices] : []).map((item, i) => (
                             <div key={`${item.symbol}-${i}`} className="flex items-center gap-3 text-xs font-mono">
                                 <span className="font-bold text-white">{item.symbol}</span>
                                 <span className={cn(
                                     "font-medium",
                                     item.change >= 0 ? "text-emerald-400" : "text-red-400"
                                 )}>
-                                    ${item.priceUSD.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
+                                    {formatPrice(item.symbol, item.price)}
                                 </span>
-                                <span className="text-slate-500">
-                                    ₹{item.priceINR.toLocaleString(undefined, { maximumFractionDigits: 0 })}
-                                </span>
+                                {/* Removed INR for now as hook only fetches USD, can re-add if needed with conversion */}
+
                                 <span className={cn(
                                     "flex items-center text-[10px]",
                                     item.change >= 0 ? "text-emerald-500" : "text-red-500"
@@ -77,9 +54,11 @@ export function LiveTicker() {
                                 </span>
                             </div>
                         ))}
+                        {loading && <div className="text-slate-500 text-xs">Loading market data...</div>}
                     </div>
                 </div>
             </div>
         </div>
     );
 }
+

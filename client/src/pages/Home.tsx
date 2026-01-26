@@ -2,7 +2,11 @@ import { Link } from "wouter";
 import { ArrowRight, TrendingUp, BarChart3, DollarSign, Calculator, PieChart, LineChart, Shield, Zap, Globe, Smartphone, ChevronRight, Clock, Award, CheckCircle2, Users, Building2, Lock, HeadphonesIcon, TrendingDown, Activity, CreditCard, HelpCircle } from "lucide-react";
 import { MarketTicker } from "@/components/MarketTicker";
 import { LiveTicker } from "@/components/LiveTicker";
+import { LearningMap } from "@/components/LearningMap";
+import { MasterMarkets } from "@/components/MasterMarkets";
+import { MentorshipProgram } from "@/components/MentorshipProgram";
 import { useProducts } from "@/hooks/use-products";
+import { useMarketData } from "@/hooks/use-market-data";
 import { motion, useMotionValue, useTransform, animate } from "framer-motion";
 import { useState, useEffect, useRef } from "react";
 
@@ -37,6 +41,7 @@ const Counter = ({ value, label }: { value: string, label: string }) => {
 
 export default function Home() {
   const { data: products } = useProducts();
+  const { data: prices } = useMarketData({ refreshInterval: 5000 });
   const tools = products?.filter(p => p.category === 'tool').slice(0, 3);
   const [marketUpdate, setMarketUpdate] = useState(0);
 
@@ -189,21 +194,17 @@ export default function Home() {
                 </div>
 
                 <div className="divide-y divide-white/5">
-                  {[
-                    { sym: "EUR/USD", val: "1.08451", ch: 0.12, sp: "0.1" },
-                    { sym: "GBP/USD", val: "1.26304", ch: -0.05, sp: "0.2" },
-                    { sym: "XAU/USD", val: "2,350.50", ch: 1.20, sp: "0.3" },
-                    { sym: "BTC/USD", val: "68,450.2", ch: -1.15, sp: "12.0" },
-                    { sym: "NASDAQ", val: "18,240.5", ch: 0.85, sp: "1.5" }
-                  ].map((row, i) => (
+                  {prices.slice(0, 5).map((row, i) => (
                     <div key={i} className={`grid grid-cols-4 gap-2 p-3 items-center transition-all duration-300 ${marketUpdate % 5 === i ? 'bg-emerald-500/5' : ''}`}>
-                      <div className="text-white font-bold text-xs">{row.sym}</div>
-                      <div className={`font-mono text-xs ${row.ch > 0 ? 'text-emerald-400' : 'text-red-400'}`}>{row.val}</div>
-                      <div className={`text-[10px] font-bold text-right flex items-center justify-end gap-1 ${row.ch > 0 ? 'text-emerald-500' : 'text-red-500'}`}>
-                        {row.ch > 0 ? <TrendingUp className="w-3 h-3" /> : <TrendingDown className="w-3 h-3" />}
-                        {row.ch}%
+                      <div className="text-white font-bold text-xs">{row.symbol}</div>
+                      <div className={`font-mono text-xs ${row.change >= 0 ? 'text-emerald-400' : 'text-red-400'}`}>
+                        {row.price < 50 ? row.price.toFixed(4) : row.price.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
                       </div>
-                      <div className="text-slate-500 text-[10px] font-mono text-right">{row.sp}</div>
+                      <div className={`text-[10px] font-bold text-right flex items-center justify-end gap-1 ${row.change >= 0 ? 'text-emerald-500' : 'text-red-500'}`}>
+                        {row.change >= 0 ? <TrendingUp className="w-3 h-3" /> : <TrendingDown className="w-3 h-3" />}
+                        {Math.abs(row.change).toFixed(2)}%
+                      </div>
+                      <div className="text-slate-500 text-[10px] font-mono text-right">{row.spread || (row.type === 'crypto' ? '15.0' : '0.2')}</div>
                     </div>
                   ))}
                 </div>
@@ -308,6 +309,15 @@ export default function Home() {
           </div>
         </div>
       </section>
+
+      {/* Learning Map - Spider Graph */}
+      <LearningMap />
+
+      {/* Master the Global Markets - Phone Mockup */}
+      <MasterMarkets />
+
+      {/* Mentorship Program - Video Background Timeline */}
+      <MentorshipProgram />
 
       {/* Trading Tools - Pricing Clarity */}
       <section className="py-24 bg-white">
