@@ -1,143 +1,142 @@
-@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Lexend:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&family=Lexend:wght@400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500;600&display=swap');
 
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
 
 :root {
-  /* Font Families */
   --font-body: 'Inter', sans-serif;
   --font-display: 'Lexend', sans-serif;
   --font-mono: 'JetBrains Mono', monospace;
 
-  /* Color Palette - Financial / Trustworthy / Professional */
-  /* Primary Blue: Trust, Stability (HSL: 215, 90%, 35%) */
-  /* Secondary Teal: Growth, Profit (HSL: 170, 75%, 41%) */
-  /* Neutral Slate: Professionalism (HSL: 215, 20%, 95%) */
+  /* Dark premium theme */
+  --background: 220 30% 5%;
+  --foreground: 210 40% 96%;
 
-  --background: 210 20% 98%;
-  --foreground: 222 47% 11%;
+  --card: 220 30% 7%;
+  --card-foreground: 210 40% 96%;
 
-  --card: 0 0% 100%;
-  --card-foreground: 222 47% 11%;
+  --popover: 220 30% 7%;
+  --popover-foreground: 210 40% 96%;
 
-  --popover: 0 0% 100%;
-  --popover-foreground: 222 47% 11%;
-
-  /* TechForex Primary Blue */
-  --primary: 215 90% 35%;
+  --primary: 215 90% 55%;
   --primary-foreground: 210 40% 98%;
 
-  /* Growth/Profit Green/Teal */
   --secondary: 170 75% 41%;
   --secondary-foreground: 210 40% 98%;
 
-  /* Subtle background fills */
-  --muted: 210 40% 96%;
-  --muted-foreground: 215 16% 47%;
+  --muted: 217 30% 14%;
+  --muted-foreground: 215 20% 55%;
 
-  --accent: 210 40% 96%;
-  --accent-foreground: 222 47% 11%;
+  --accent: 217 30% 14%;
+  --accent-foreground: 210 40% 98%;
 
   --destructive: 0 84% 60%;
   --destructive-foreground: 210 40% 98%;
 
-  --border: 214 32% 91%;
-  --input: 214 32% 91%;
-  --ring: 215 90% 35%;
+  --border: 217 30% 12%;
+  --input: 217 30% 12%;
+  --ring: 215 90% 55%;
 
-  --radius: 0.5rem;
-}
-
-.dark {
-  --background: 222 47% 11%;
-  --foreground: 210 40% 98%;
-
-  --card: 222 47% 11%;
-  --card-foreground: 210 40% 98%;
-
-  --popover: 222 47% 11%;
-  --popover-foreground: 210 40% 98%;
-
-  --primary: 215 90% 45%;
-  --primary-foreground: 222 47% 11%;
-
-  --secondary: 170 75% 41%;
-  --secondary-foreground: 222 47% 11%;
-
-  --muted: 217 33% 17%;
-  --muted-foreground: 215 20% 65%;
-
-  --accent: 217 33% 17%;
-  --accent-foreground: 210 40% 98%;
-
-  --destructive: 0 62% 30%;
-  --destructive-foreground: 210 40% 98%;
-
-  --border: 217 33% 17%;
-  --input: 217 33% 17%;
-  --ring: 215 90% 45%;
+  --radius: 0.75rem;
 }
 
 @layer base {
+  * {
+    @apply border-border;
+  }
+
+  html {
+    scroll-behavior: smooth;
+  }
+
   body {
-    @apply bg-background text-foreground antialiased;
+    @apply bg-[#07101e] text-slate-200 antialiased;
     font-family: var(--font-body);
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
   }
 
-  h1,
-  h2,
-  h3,
-  h4,
-  h5,
-  h6 {
+  /* Custom scrollbar */
+  ::-webkit-scrollbar {
+    width: 6px;
+  }
+  ::-webkit-scrollbar-track {
+    background: #07101e;
+  }
+  ::-webkit-scrollbar-thumb {
+    background: #1e3a5f;
+    border-radius: 3px;
+  }
+  ::-webkit-scrollbar-thumb:hover {
+    background: #2563eb;
+  }
+
+  h1, h2, h3, h4, h5, h6 {
     font-family: var(--font-display);
-    @apply font-bold tracking-tight text-slate-900;
+    @apply font-black tracking-tight text-white;
+  }
+
+  /* Inputs in dark theme */
+  input, textarea, select {
+    @apply bg-white/[0.05] border-white/10 text-white placeholder:text-slate-600;
+  }
+
+  input:focus, textarea:focus, select:focus {
+    @apply border-blue-500/50 outline-none ring-2 ring-blue-500/20;
   }
 }
 
-/* Custom Utilities for Trading Aesthetics */
 @layer components {
-  .trading-card {
-    @apply bg-white rounded-xl border border-slate-200/60 shadow-trading transition-all duration-300 hover:shadow-trading-hover hover:border-blue-100 hover:-translate-y-1;
-  }
-
+  /* Professional card - dark variant */
   .card-professional {
-    @apply bg-white rounded-2xl border border-slate-200 shadow-professional transition-all duration-300 hover:shadow-professional-hover hover:border-slate-300 hover:-translate-y-1;
+    @apply bg-white/[0.03] rounded-2xl border border-white/[0.07] transition-all duration-300 hover:border-white/20 hover:bg-white/[0.06];
   }
 
-  .nav-link {
-    @apply text-sm font-medium text-slate-600 hover:text-primary transition-colors;
+  /* Glass card */
+  .glass-card {
+    @apply bg-white/[0.04] backdrop-blur-xl border border-white/[0.08] rounded-2xl;
   }
 
+  /* Button primary - blue gradient */
   .btn-primary {
-    @apply bg-primary text-white hover:bg-blue-700 shadow-md shadow-blue-900/20 px-6 py-3 rounded-lg font-bold tracking-wide transition-all duration-200 hover:shadow-xl hover:shadow-blue-900/30 hover:-translate-y-0.5 active:translate-y-0 active:scale-[0.98] active:shadow-sm border border-transparent;
+    @apply bg-gradient-to-r from-blue-600 to-blue-500 hover:from-blue-500 hover:to-cyan-500 text-white font-black px-6 py-3 rounded-xl shadow-lg shadow-blue-900/40 hover:shadow-blue-800/50 hover:scale-[1.02] active:scale-[0.98] transition-all duration-200 flex items-center gap-2;
   }
 
-  .btn-secondary {
-    @apply bg-white text-slate-800 border-2 border-slate-200 hover:border-slate-300 hover:bg-slate-50 px-6 py-3 rounded-lg font-bold tracking-wide transition-all duration-200 shadow-sm hover:shadow-md hover:-translate-y-0.5 active:translate-y-0 active:scale-[0.98];
+  /* Button outline */
+  .btn-outline {
+    @apply bg-transparent border-2 border-white/20 hover:border-white/40 text-white font-bold px-6 py-3 rounded-xl transition-all duration-200 flex items-center gap-2;
   }
 
-  .section-padding {
-    @apply py-16 md:py-24;
+  /* Section tag */
+  .section-tag {
+    @apply inline-flex items-center gap-2 text-blue-400 font-bold uppercase tracking-widest text-xs;
+  }
+
+  /* Section heading */
+  .section-heading {
+    @apply text-4xl lg:text-5xl font-black text-white leading-tight;
+  }
+
+  /* Gradient text */
+  .text-gradient {
+    @apply bg-gradient-to-r from-blue-400 to-cyan-400 bg-clip-text text-transparent;
+  }
+
+  /* Nav link */
+  .nav-link {
+    @apply text-sm font-semibold text-slate-400 hover:text-white transition-colors;
   }
 }
 
-/* Ticker Animation */
-@keyframes ticker {
-  0% {
-    transform: translateX(0);
-  }
-
-  100% {
-    transform: translateX(-50%);
-  }
+/* Selection color */
+::selection {
+  background: rgba(59, 130, 246, 0.3);
+  color: white;
 }
 
-.animate-ticker {
-  animation: ticker 40s linear infinite;
-}
-
-.animate-ticker:hover {
-  animation-play-state: paused;
+/* Focus visible */
+:focus-visible {
+  outline: 2px solid rgba(59, 130, 246, 0.6);
+  outline-offset: 2px;
 }

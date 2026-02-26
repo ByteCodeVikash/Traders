@@ -1,159 +1,42 @@
-import { useState, useEffect, useRef } from 'react';
-
+// Static market data - no external API required
 export interface MarketData {
-    symbol: string;
-    name: string;
-    price: number;
-    change: number; // Percentage change
-    changeAmount?: number;
-    high?: number;
-    low?: number;
-    spread?: string; // Twelve Data doesn't give spread easily in free tier, can estimate
-    type: 'forex' | 'crypto' | 'stock' | 'index';
+  symbol: string;
+  name: string;
+  price: number;
+  change: number;
+  type: 'forex' | 'crypto' | 'index' | 'commodity';
+  high?: number;
+  low?: number;
+  volume?: string;
 }
 
-interface UseMarketDataOptions {
-    refreshInterval?: number;
-}
+export const STATIC_MARKET_DATA: MarketData[] = [
+  { symbol: 'EUR/USD', name: 'Euro / US Dollar', price: 1.0842, change: 0.23, type: 'forex', high: 1.0891, low: 1.0798, volume: '98.2B' },
+  { symbol: 'GBP/USD', name: 'British Pound / US Dollar', price: 1.2634, change: -0.15, type: 'forex', high: 1.2701, low: 1.2589, volume: '62.1B' },
+  { symbol: 'USD/JPY', name: 'US Dollar / Japanese Yen', price: 149.82, change: 0.41, type: 'forex', high: 150.21, low: 149.34, volume: '75.4B' },
+  { symbol: 'USD/CHF', name: 'US Dollar / Swiss Franc', price: 0.9012, change: -0.08, type: 'forex', high: 0.9054, low: 0.8976, volume: '28.7B' },
+  { symbol: 'AUD/USD', name: 'Australian Dollar / US Dollar', price: 0.6489, change: 0.31, type: 'forex', high: 0.6521, low: 0.6452, volume: '31.2B' },
+  { symbol: 'USD/CAD', name: 'US Dollar / Canadian Dollar', price: 1.3621, change: -0.22, type: 'forex', high: 1.3689, low: 1.3578, volume: '24.8B' },
+  { symbol: 'NZD/USD', name: 'New Zealand Dollar / US Dollar', price: 0.5978, change: 0.18, type: 'forex', high: 0.6012, low: 0.5941, volume: '12.3B' },
+  { symbol: 'EUR/GBP', name: 'Euro / British Pound', price: 0.8582, change: 0.09, type: 'forex', high: 0.8614, low: 0.8551, volume: '41.5B' },
+  { symbol: 'BTC/USD', name: 'Bitcoin', price: 67842.50, change: 2.14, type: 'crypto', high: 68900.00, low: 65210.00, volume: '42.1B' },
+  { symbol: 'ETH/USD', name: 'Ethereum', price: 3421.80, change: 1.87, type: 'crypto', high: 3589.00, low: 3298.00, volume: '18.6B' },
+  { symbol: 'SOL/USD', name: 'Solana', price: 178.42, change: 3.21, type: 'crypto', high: 184.00, low: 169.50, volume: '4.2B' },
+  { symbol: 'BNB/USD', name: 'BNB', price: 412.65, change: 0.98, type: 'crypto', high: 421.00, low: 405.00, volume: '1.9B' },
+  { symbol: 'XRP/USD', name: 'Ripple', price: 0.6234, change: -1.12, type: 'crypto', high: 0.6541, low: 0.6089, volume: '2.8B' },
+  { symbol: 'NIFTY 50', name: 'Nifty 50 Index', price: 22456.80, change: 0.67, type: 'index', high: 22621.00, low: 22298.00, volume: '18.4B' },
+  { symbol: 'SENSEX', name: 'BSE Sensex', price: 73892.45, change: 0.54, type: 'index', high: 74201.00, low: 73512.00, volume: '12.1B' },
+  { symbol: 'S&P 500', name: 'S&P 500 Index', price: 5218.40, change: 0.32, type: 'index', high: 5241.00, low: 5189.00, volume: '89.3B' },
+  { symbol: 'NASDAQ', name: 'Nasdaq Composite', price: 16742.30, change: 0.48, type: 'index', high: 16891.00, low: 16598.00, volume: '124.7B' },
+  { symbol: 'XAU/USD', name: 'Gold', price: 2312.40, change: 0.76, type: 'commodity', high: 2341.00, low: 2289.00, volume: '41.2B' },
+  { symbol: 'XAG/USD', name: 'Silver', price: 27.84, change: 1.24, type: 'commodity', high: 28.41, low: 27.12, volume: '8.9B' },
+  { symbol: 'CRUDE OIL', name: 'Crude Oil WTI', price: 78.92, change: -0.89, type: 'commodity', high: 80.12, low: 78.21, volume: '31.4B' },
+];
 
-// Default symbols to fetch
-const FOREX_PAIRS = ['EUR/USD', 'GBP/USD', 'USD/JPY'];
-const CRYPTO_IDS = ['bitcoin', 'ethereum', 'tether', 'solana', 'ripple'];
-
-export function useMarketData({ refreshInterval = 5000 }: UseMarketDataOptions = {}) {
-    const [data, setData] = useState<MarketData[]>([]);
-    const [loading, setLoading] = useState(true);
-    const [error, setError] = useState<string | null>(null);
-
-    // Cache to prevent jitter if API fails
-    const dataCache = useRef<Map<string, MarketData>>(new Map());
-
-    // Twelve Data API Key
-    const TWELVE_DATA_API_KEY = import.meta.env.VITE_TWELVE_DATA_API_KEY;
-    const COINGECKO_API_KEY = import.meta.env.VITE_COINGECKO_API_KEY;
-
-    const fetchData = async () => {
-        try {
-            // 1. Fetch Forex Data (Twelve Data)
-            let forexData: MarketData[] = [];
-            if (TWELVE_DATA_API_KEY && TWELVE_DATA_API_KEY !== 'your_twelve_data_key_here') {
-                const symbolString = FOREX_PAIRS.join(',');
-                const forexUrl = `https://api.twelvedata.com/quote?symbol=${symbolString}&apikey=${TWELVE_DATA_API_KEY}`;
-
-                try {
-                    const res = await fetch(forexUrl);
-                    const json = await res.json();
-
-                    // Handle single vs multiple responses
-                    const items = json.symbol ? { [json.symbol]: json } : json;
-
-                    Object.values(items).forEach((item: any) => {
-                        if (item.symbol) {
-                            const price = parseFloat(item.close) || parseFloat(item.percent_change) || 0;
-                            // Note: Twelve Data quote endpoint gives 'close' as current price roughly, or use 'price' field if available? 
-                            // Actually quote endpoint returns "close" as previous close? No, it returns "close" but real-time price is usually "currenc_exchange_rate" or "price".
-                            // Quote endpoint: symbol, name, exchange, mic_code, currency, datetime, timestamp, open, high, low, close, volume, previous_close, change, percent_change, average_volume, is_market_open, fifty_two_week
-
-                            const currentPrice = parseFloat(item.close); // For quote endpoint, close is often the latest price or we use realtime endpoint (but quote is better for change %)
-                            const change = parseFloat(item.percent_change);
-
-                            const md: MarketData = {
-                                symbol: item.symbol,
-                                name: item.name,
-                                price: currentPrice,
-                                change: change,
-                                type: 'forex',
-                                spread: '0.1' // Mock spread as it's not in basic quote
-                            };
-                            forexData.push(md);
-                            dataCache.current.set(item.symbol, md);
-                        }
-                    });
-                } catch (e) {
-                    console.warn("Forex fetch failed", e);
-                }
-            } else {
-                // console.log("Skipping Forex fetch - No API Key");
-            }
-
-            // 2. Fetch Crypto Data (CoinGecko)
-            let cryptoData: MarketData[] = [];
-            const cryptoUrl = `https://api.coingecko.com/api/v3/simple/price?ids=${CRYPTO_IDS.join(',')}&vs_currencies=usd&include_24hr_change=true`;
-            // Add API key header if available to increase limits
-            const coingeckoOptions = COINGECKO_API_KEY && COINGECKO_API_KEY !== 'your_coingecko_key_here'
-                ? { headers: { 'x-cg-demo-api-key': COINGECKO_API_KEY } }
-                : {};
-
-            try {
-                const res = await fetch(cryptoUrl, coingeckoOptions);
-                if (res.status === 429) {
-                    console.warn("CoinGecko rate limited");
-                } else {
-                    const json = await res.json();
-                    // json format: { bitcoin: { usd: 65000, usd_24h_change: 2.5 } }
-
-                    // Map ids back to symbols (manual map or approx)
-                    const nameToSymbol: { [key: string]: string } = {
-                        'bitcoin': 'BTC/USD',
-                        'ethereum': 'ETH/USD',
-                        'tether': 'USDT/USD',
-                        'solana': 'SOL/USD',
-                        'ripple': 'XRP/USD'
-                    };
-
-                    Object.entries(json).forEach(([id, val]: [string, any]) => {
-                        const symbol = nameToSymbol[id] || id.toUpperCase();
-                        const md: MarketData = {
-                            symbol: symbol,
-                            name: id.charAt(0).toUpperCase() + id.slice(1),
-                            price: val.usd,
-                            change: val.usd_24h_change,
-                            type: 'crypto',
-                            spread: '0.5' // Mock
-                        };
-                        cryptoData.push(md);
-                        dataCache.current.set(symbol, md);
-                    });
-                }
-            } catch (e) {
-                console.warn("Crypto fetch failed", e);
-            }
-
-            // 3. Fallback/Merge with Cache
-            // If we failed to get data, use cache if available
-            // Or if we have partial data, merge it.
-
-            // If no keys are set, fallback to something? User wants REAL data. 
-            // If requests fail, we might return empty or error.
-            // But for "Smooth UI update", we should keep old data if new fetch fails.
-
-            const allData = [...forexData, ...cryptoData];
-
-            if (allData.length > 0) {
-                setData(allData);
-                setError(null);
-            } else if (dataCache.current.size > 0) {
-                // Keep showing cached data
-                setData(Array.from(dataCache.current.values()));
-            } else {
-                // If totally empty and 1st run
-                // setError("Unable to fetch market data"); 
-            }
-
-            setLoading(false);
-
-        } catch (err) {
-            console.error("Market data fetch error:", err);
-            setError("Failed to load market data");
-            setLoading(false);
-        }
-    };
-
-    useEffect(() => {
-        fetchData();
-        const interval = setInterval(fetchData, refreshInterval);
-        return () => clearInterval(interval);
-    }, [refreshInterval]);
-
-    return { data, loading, error };
+export function useMarketData() {
+  return {
+    data: STATIC_MARKET_DATA,
+    loading: false,
+    error: null,
+  };
 }

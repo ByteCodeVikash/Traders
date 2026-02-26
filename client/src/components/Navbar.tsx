@@ -1,76 +1,121 @@
 import { Link, useLocation } from "wouter";
-import { useState } from "react";
-import { Menu, X, BarChart2, BookOpen, GraduationCap, ChevronDown } from "lucide-react";
-import { cn } from "@/lib/utils";
-import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu";
+import { useState, useEffect } from "react";
+import { Menu, X, BookOpen, GraduationCap, ChevronDown, TrendingUp, Wrench, Phone } from "lucide-react";
+import { motion, AnimatePresence } from "framer-motion";
 
 export function Navbar() {
   const [isOpen, setIsOpen] = useState(false);
+  const [scrolled, setScrolled] = useState(false);
+  const [eduOpen, setEduOpen] = useState(false);
   const [location] = useLocation();
 
-  const links = [
-    { href: "/", label: "Home" },
-    { href: "/markets", label: "Markets" },
-    { href: "/tools", label: "Tools" },
-    // Education is handled separately
-    { href: "/contact", label: "Contact" },
-  ];
+  useEffect(() => {
+    const onScroll = () => setScrolled(window.scrollY > 20);
+    window.addEventListener("scroll", onScroll, { passive: true });
+    return () => window.removeEventListener("scroll", onScroll);
+  }, []);
+
+  const isActive = (href: string) => location === href;
 
   return (
-    <header className="sticky top-0 z-50 w-full border-b bg-slate-50/95 backdrop-blur supports-[backdrop-filter]:bg-slate-50/60">
+    <header className={`sticky top-0 z-50 w-full transition-all duration-300 ${scrolled ? "bg-[#07101e]/95 backdrop-blur-xl border-b border-white/[0.06] shadow-2xl shadow-black/20" : "bg-[#07101e]/80 backdrop-blur-sm border-b border-transparent"}`}>
       <div className="container mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="flex h-16 items-center justify-between">
-          <div className="flex items-center gap-2">
-            <Link href="/" className="flex items-center gap-2">
-              <img src="/techforex_logo.webp" alt="TechForex" className="h-10 w-auto object-contain" />
-              <span className="text-xl font-bold tracking-tight text-primary font-display">
-                TechForex
-              </span>
+        <div className="flex h-[68px] items-center justify-between">
+
+          {/* Logo */}
+          <Link href="/" className="flex items-center gap-2.5 group">
+            <img src="/techforex_logo.webp" alt="TechForex" className="h-9 w-auto object-contain" onError={(e) => { e.currentTarget.style.display = 'none'; }} />
+            <span className="text-lg font-black tracking-tight text-white group-hover:text-blue-400 transition-colors">
+              Tech<span className="text-blue-400">Forex</span>
+            </span>
+          </Link>
+
+          {/* Desktop Nav */}
+          <nav className="hidden md:flex items-center gap-1">
+            {[
+              { href: "/", label: "Home", icon: null },
+              { href: "/markets", label: "Markets", icon: TrendingUp },
+              { href: "/tools", label: "Tools", icon: Wrench },
+              { href: "/contact", label: "Contact", icon: Phone },
+            ].map(({ href, label }) => (
+              <Link key={href} href={href}>
+                <span className={`relative px-4 py-2 rounded-lg text-sm font-semibold transition-all cursor-pointer flex items-center gap-1.5 ${
+                  isActive(href)
+                    ? "text-white bg-white/[0.08]"
+                    : "text-slate-400 hover:text-white hover:bg-white/[0.05]"
+                }`}>
+                  {label}
+                  {isActive(href) && (
+                    <motion.div layoutId="nav-indicator" className="absolute bottom-0 left-1/2 -translate-x-1/2 w-1 h-1 rounded-full bg-blue-400" />
+                  )}
+                </span>
+              </Link>
+            ))}
+
+            {/* Education Dropdown */}
+            <div className="relative" onMouseEnter={() => setEduOpen(true)} onMouseLeave={() => setEduOpen(false)}>
+              <button className={`relative px-4 py-2 rounded-lg text-sm font-semibold transition-all flex items-center gap-1.5 ${
+                location.startsWith('/education') || location === '/books'
+                  ? "text-white bg-white/[0.08]"
+                  : "text-slate-400 hover:text-white hover:bg-white/[0.05]"
+              }`}>
+                Education
+                <ChevronDown className={`w-3.5 h-3.5 transition-transform ${eduOpen ? 'rotate-180' : ''}`} />
+              </button>
+
+              <AnimatePresence>
+                {eduOpen && (
+                  <motion.div
+                    initial={{ opacity: 0, y: 6, scale: 0.97 }}
+                    animate={{ opacity: 1, y: 0, scale: 1 }}
+                    exit={{ opacity: 0, y: 6, scale: 0.97 }}
+                    transition={{ duration: 0.15 }}
+                    className="absolute top-full left-0 mt-2 w-52 bg-[#0d1827] border border-white/10 rounded-2xl shadow-2xl shadow-black/40 overflow-hidden"
+                  >
+                    <div className="p-2">
+                      <Link href="/education" onClick={() => setEduOpen(false)}>
+                        <div className="flex items-center gap-3 px-3 py-2.5 rounded-xl hover:bg-white/[0.06] cursor-pointer group">
+                          <div className="w-8 h-8 bg-blue-500/10 rounded-lg flex items-center justify-center">
+                            <GraduationCap className="w-4 h-4 text-blue-400" />
+                          </div>
+                          <div>
+                            <div className="text-sm font-bold text-white group-hover:text-blue-400 transition-colors">All Courses</div>
+                            <div className="text-xs text-slate-500">Browse programs</div>
+                          </div>
+                        </div>
+                      </Link>
+                      <Link href="/books" onClick={() => setEduOpen(false)}>
+                        <div className="flex items-center gap-3 px-3 py-2.5 rounded-xl hover:bg-white/[0.06] cursor-pointer group">
+                          <div className="w-8 h-8 bg-emerald-500/10 rounded-lg flex items-center justify-center">
+                            <BookOpen className="w-4 h-4 text-emerald-400" />
+                          </div>
+                          <div>
+                            <div className="text-sm font-bold text-white group-hover:text-emerald-400 transition-colors">Books & Guides</div>
+                            <div className="text-xs text-slate-500">Trading literature</div>
+                          </div>
+                        </div>
+                      </Link>
+                    </div>
+                  </motion.div>
+                )}
+              </AnimatePresence>
+            </div>
+          </nav>
+
+          {/* CTA */}
+          <div className="hidden md:flex items-center gap-3">
+            <Link href="/education">
+              <button className="px-5 py-2.5 bg-gradient-to-r from-blue-600 to-blue-500 hover:from-blue-500 hover:to-blue-400 text-white text-sm font-black rounded-xl shadow-lg shadow-blue-900/30 hover:shadow-blue-800/40 hover:scale-[1.03] transition-all">
+                Enroll Now
+              </button>
             </Link>
           </div>
 
-          {/* Desktop Nav */}
-          <nav className="hidden md:flex items-center gap-8">
-            <Link href="/" className={cn("nav-link", location === "/" && "text-primary font-semibold")}>Home</Link>
-            <Link href="/markets" className={cn("nav-link", location === "/markets" && "text-primary font-semibold")}>Markets</Link>
-            <Link href="/tools" className={cn("nav-link", location === "/tools" && "text-primary font-semibold")}>Tools</Link>
-
-            <DropdownMenu>
-              <DropdownMenuTrigger className="flex items-center gap-1 nav-link outline-none">
-                Education <ChevronDown className="w-4 h-4" />
-              </DropdownMenuTrigger>
-              <DropdownMenuContent>
-                <Link href="/education">
-                  <DropdownMenuItem className="cursor-pointer">
-                    <GraduationCap className="w-4 h-4 mr-2" /> Center Home
-                  </DropdownMenuItem>
-                </Link>
-                <Link href="/books">
-                  <DropdownMenuItem className="cursor-pointer">
-                    <BookOpen className="w-4 h-4 mr-2" /> Books & Guides
-                  </DropdownMenuItem>
-                </Link>
-              </DropdownMenuContent>
-            </DropdownMenu>
-
-            <Link href="/contact" className={cn("nav-link", location === "/contact" && "text-primary font-semibold")}>Contact</Link>
-
-            <Link href="/education">
-              <button className="btn-primary py-2 px-5 text-sm shadow-md">
-                Get Started
-              </button>
-            </Link>
-          </nav>
-
           {/* Mobile Menu Button */}
           <button
-            className="md:hidden p-2 text-slate-600"
+            className="md:hidden p-2 text-slate-400 hover:text-white transition-colors"
             onClick={() => setIsOpen(!isOpen)}
+            aria-label="Toggle menu"
           >
             {isOpen ? <X className="h-6 w-6" /> : <Menu className="h-6 w-6" />}
           </button>
@@ -78,33 +123,42 @@ export function Navbar() {
       </div>
 
       {/* Mobile Nav */}
-      {isOpen && (
-        <div className="md:hidden border-t bg-white">
-          <div className="space-y-1 px-4 py-4">
-            <Link href="/" onClick={() => setIsOpen(false)} className="block px-3 py-2 text-base font-medium text-slate-600 hover:bg-slate-50 rounded-md">Home</Link>
-            <Link href="/markets" onClick={() => setIsOpen(false)} className="block px-3 py-2 text-base font-medium text-slate-600 hover:bg-slate-50 rounded-md">Markets</Link>
-            <Link href="/tools" onClick={() => setIsOpen(false)} className="block px-3 py-2 text-base font-medium text-slate-600 hover:bg-slate-50 rounded-md">Tools</Link>
-
-            <div className="px-3 py-2">
-              <div className="text-sm font-semibold text-slate-900 mb-2">Education</div>
-              <div className="pl-4 space-y-2 border-l-2 border-slate-100">
-                <Link href="/education" onClick={() => setIsOpen(false)} className="block text-sm text-slate-600">Center Home</Link>
-                <Link href="/books" onClick={() => setIsOpen(false)} className="block text-sm text-slate-600">Books & Guides</Link>
+      <AnimatePresence>
+        {isOpen && (
+          <motion.div
+            initial={{ opacity: 0, height: 0 }}
+            animate={{ opacity: 1, height: "auto" }}
+            exit={{ opacity: 0, height: 0 }}
+            className="md:hidden border-t border-white/[0.06] bg-[#07101e] overflow-hidden"
+          >
+            <div className="px-4 py-4 space-y-1">
+              {[
+                { href: "/", label: "Home" },
+                { href: "/markets", label: "Markets" },
+                { href: "/tools", label: "Tools" },
+                { href: "/education", label: "All Courses" },
+                { href: "/books", label: "Books & Guides" },
+                { href: "/contact", label: "Contact" },
+              ].map(({ href, label }) => (
+                <Link key={href} href={href} onClick={() => setIsOpen(false)}>
+                  <span className={`block px-4 py-3 rounded-xl text-sm font-semibold transition-all cursor-pointer ${
+                    isActive(href) ? "bg-white/[0.08] text-white" : "text-slate-400 hover:bg-white/[0.04] hover:text-white"
+                  }`}>
+                    {label}
+                  </span>
+                </Link>
+              ))}
+              <div className="pt-3">
+                <Link href="/education" onClick={() => setIsOpen(false)}>
+                  <button className="w-full py-3.5 bg-gradient-to-r from-blue-600 to-blue-500 text-white font-black rounded-xl">
+                    Enroll Now
+                  </button>
+                </Link>
               </div>
             </div>
-
-            <Link href="/contact" onClick={() => setIsOpen(false)} className="block px-3 py-2 text-base font-medium text-slate-600 hover:bg-slate-50 rounded-md">Contact</Link>
-
-            <div className="pt-4">
-              <Link href="/education" onClick={() => setIsOpen(false)}>
-                <button className="w-full btn-primary text-base">
-                  Get Started
-                </button>
-              </Link>
-            </div>
-          </div>
-        </div>
-      )}
+          </motion.div>
+        )}
+      </AnimatePresence>
     </header>
   );
 }

@@ -1,68 +1,132 @@
 import { Link } from "wouter";
-import { BarChart2, Mail, Phone, MapPin, Twitter, Facebook, Linkedin, Instagram } from "lucide-react";
+import { Lock, Shield, CheckCircle2, Youtube, Instagram, Twitter, Linkedin } from "lucide-react";
+
+const footerLinks = [
+  {
+    title: "Programs",
+    links: [
+      { label: "Starter Pack", href: "/education" },
+      { label: "Pro Trader Course", href: "/education" },
+      { label: "Elite Mentorship", href: "/education" },
+      { label: "Live Sessions", href: "/education" },
+    ],
+  },
+  {
+    title: "Resources",
+    links: [
+      { label: "Trading Books", href: "/books" },
+      { label: "Trading Tools", href: "/tools" },
+      { label: "Market Analysis", href: "/markets" },
+      { label: "Free Webinars", href: "/education" },
+    ],
+  },
+  {
+    title: "Company",
+    links: [
+      { label: "About Shivam", href: "/contact" },
+      { label: "Student Results", href: "/" },
+      { label: "Contact Us", href: "/contact" },
+      { label: "WhatsApp Support", href: "https://wa.me/919876543210" },
+    ],
+  },
+];
+
+const socials = [
+  { icon: Youtube, href: "#", label: "YouTube", color: "hover:text-red-400" },
+  { icon: Instagram, href: "#", label: "Instagram", color: "hover:text-pink-400" },
+  { icon: Twitter, href: "#", label: "Twitter", color: "hover:text-sky-400" },
+  { icon: Linkedin, href: "#", label: "LinkedIn", color: "hover:text-blue-400" },
+];
 
 export function Footer() {
   return (
-    <footer className="bg-slate-900 text-slate-300 border-t border-slate-800">
-      <div className="container mx-auto px-4 py-12 md:py-16 lg:px-8">
-        <div className="grid grid-cols-1 gap-8 md:grid-cols-2 lg:grid-cols-4">
-          <div className="space-y-4">
-            <div className="flex items-center gap-2 text-white">
-              <img src="/techforex_logo.webp" alt="TechForex" className="h-10 w-auto object-contain" />
-              <span className="text-xl font-bold font-display">TechForex</span>
+    <footer className="bg-[#050d18] border-t border-white/[0.05]">
+      <div className="container mx-auto px-4 py-16">
+
+        {/* Main grid */}
+        <div className="grid grid-cols-2 md:grid-cols-5 gap-10 mb-12">
+
+          {/* Brand */}
+          <div className="col-span-2">
+            <div className="flex items-center gap-3 mb-5">
+              <img
+                src="/techforex_logo.webp"
+                alt="TechForex"
+                className="h-10 w-auto"
+                onError={(e) => { e.currentTarget.style.display = 'none'; }}
+              />
+              <span className="text-xl font-black text-white tracking-tight">Tech<span className="text-blue-400">Forex</span></span>
             </div>
-            <p className="text-sm leading-relaxed text-slate-400">
-              TechForex provides professional trading tools, real-time market data, and comprehensive education for traders worldwide.
+            <p className="text-slate-500 text-sm max-w-sm leading-relaxed mb-7">
+              India's premier forex & stock trading education platform. Learn from a NISM-certified professional with 8+ years of proven market experience.
             </p>
-            <div className="flex gap-4 pt-2">
-              <a href="#" className="text-slate-400 hover:text-white transition-colors"><Twitter className="h-5 w-5" /></a>
-              <a href="#" className="text-slate-400 hover:text-white transition-colors"><Facebook className="h-5 w-5" /></a>
-              <a href="#" className="text-slate-400 hover:text-white transition-colors"><Linkedin className="h-5 w-5" /></a>
-              <a href="#" className="text-slate-400 hover:text-white transition-colors"><Instagram className="h-5 w-5" /></a>
+
+            {/* Social Links */}
+            <div className="flex gap-3">
+              {socials.map((s) => (
+                <a
+                  key={s.label}
+                  href={s.href}
+                  aria-label={s.label}
+                  className={`w-9 h-9 rounded-xl bg-white/[0.04] border border-white/[0.07] flex items-center justify-center text-slate-500 ${s.color} hover:border-white/20 transition-all`}
+                >
+                  <s.icon className="w-4 h-4" />
+                </a>
+              ))}
             </div>
           </div>
 
-          <div>
-            <h3 className="mb-4 text-lg font-semibold text-white">Quick Links</h3>
-            <ul className="space-y-2 text-sm">
-              <li><Link href="/" className="hover:text-primary transition-colors">Home</Link></li>
-              <li><Link href="/markets" className="hover:text-primary transition-colors">Live Markets</Link></li>
-              <li><Link href="/tools" className="hover:text-primary transition-colors">Trading Tools</Link></li>
-              <li><Link href="/education" className="hover:text-primary transition-colors">Education & Books</Link></li>
-            </ul>
-          </div>
-
-          <div>
-            <h3 className="mb-4 text-lg font-semibold text-white">Resources</h3>
-            <ul className="space-y-2 text-sm">
-              <li><Link href="/education" className="hover:text-primary transition-colors">Beginner's Guide</Link></li>
-              <li><Link href="/education" className="hover:text-primary transition-colors">Advanced Strategies</Link></li>
-              <li><Link href="#" className="hover:text-primary transition-colors">Risk Management</Link></li>
-              <li><Link href="/contact" className="hover:text-primary transition-colors">Support Center</Link></li>
-            </ul>
-          </div>
-
-          <div>
-            <h3 className="mb-4 text-lg font-semibold text-white">Contact Us</h3>
-            <ul className="space-y-3 text-sm">
-              <li className="flex items-start gap-3">
-                <MapPin className="mt-0.5 h-5 w-5 text-primary shrink-0" />
-                <span>123 Financial District,<br />New York, NY 10005</span>
-              </li>
-              <li className="flex items-center gap-3">
-                <Phone className="h-5 w-5 text-primary shrink-0" />
-                <span>+1 (555) 123-4567</span>
-              </li>
-              <li className="flex items-center gap-3">
-                <Mail className="h-5 w-5 text-primary shrink-0" />
-                <span>support@techforex.com</span>
-              </li>
-            </ul>
-          </div>
+          {/* Link Columns */}
+          {footerLinks.map((col) => (
+            <div key={col.title}>
+              <h4 className="text-white font-black text-xs uppercase tracking-widest mb-5">{col.title}</h4>
+              <ul className="space-y-3">
+                {col.links.map((link) => (
+                  <li key={link.label}>
+                    {link.href.startsWith('http') ? (
+                      <a
+                        href={link.href}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="text-slate-500 text-sm hover:text-blue-400 transition-colors"
+                      >
+                        {link.label}
+                      </a>
+                    ) : (
+                      <Link href={link.href}>
+                        <span className="text-slate-500 text-sm hover:text-blue-400 transition-colors cursor-pointer">
+                          {link.label}
+                        </span>
+                      </Link>
+                    )}
+                  </li>
+                ))}
+              </ul>
+            </div>
+          ))}
         </div>
 
-        <div className="mt-12 border-t border-slate-800 pt-8 text-center text-sm text-slate-500">
-          <p>&copy; {new Date().getFullYear()} TechForex. All rights reserved. Trading involves risk.</p>
+        {/* Bottom bar */}
+        <div className="pt-8 border-t border-white/[0.05]">
+          <div className="flex flex-wrap gap-y-4 justify-between items-center mb-5">
+            <div className="flex items-center gap-6 flex-wrap">
+              {[
+                { icon: Lock, text: "SSL Secured" },
+                { icon: Shield, text: "NISM Certified" },
+                { icon: CheckCircle2, text: "7-Day Refund" },
+              ].map((badge) => (
+                <div key={badge.text} className="flex items-center gap-2 text-slate-600 text-xs font-medium">
+                  <badge.icon className="w-3.5 h-3.5 text-emerald-500" />
+                  {badge.text}
+                </div>
+              ))}
+            </div>
+            <p className="text-slate-700 text-xs">© {new Date().getFullYear()} TechForex. All rights reserved.</p>
+          </div>
+
+          <p className="text-slate-700 text-xs leading-relaxed max-w-4xl">
+            <strong className="text-slate-600">Risk Disclaimer:</strong> Trading financial instruments involves substantial risk of loss and is not suitable for all investors. Past performance of any trading strategy is not necessarily indicative of future results. Educational content is for informational purposes only and does not constitute financial advice. Please trade responsibly.
+          </p>
         </div>
       </div>
     </footer>
