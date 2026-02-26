@@ -1,5 +1,5 @@
 import { motion } from "framer-motion";
-import { ArrowUpRight, BarChart2, Search, MessageCircle, User, CheckCircle2 } from "lucide-react";
+import { ArrowUpRight, BarChart2, Search, MessageCircle, User, CheckCircle2, TrendingUp } from "lucide-react";
 
 const phoneMarketData = [
   { symbol: "EUR/USD", name: "Euro / U.S. Dollar", price: "1.0842", change: "+0.23%", up: true },
@@ -134,10 +134,13 @@ export const MasterMarkets = () => {
 
                 {/* App Header */}
                 <div className="absolute top-8 inset-x-0 h-14 bg-[#080d13] z-10 flex items-center justify-between px-5 border-b border-white/[0.05]">
-                  <div className="w-7 h-7 rounded-full bg-white/[0.06] flex items-center justify-center">
-                    <div className="w-3 h-0.5 bg-white/40 rounded" />
+                  <div className="flex items-center gap-1.5">
+                    <div className="w-6 h-6 rounded-lg bg-blue-600/30 flex items-center justify-center">
+                      <TrendingUp className="w-3.5 h-3.5 text-blue-400" />
+                    </div>
+                    <span className="font-black tracking-tight text-white text-xs">Tech<span className="text-blue-400">Forex</span></span>
                   </div>
-                  <span className="font-black tracking-widest text-white/90 text-xs">WATCHLIST</span>
+                  <span className="font-bold text-white/50 text-[9px] uppercase tracking-widest">Markets</span>
                   <div className="w-7 h-7 rounded-full bg-blue-600/20 text-blue-400 flex items-center justify-center text-xs font-black">+</div>
                 </div>
 
