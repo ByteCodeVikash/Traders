@@ -1,7 +1,6 @@
 import { Link } from "wouter";
-import { ArrowRight, TrendingUp, BarChart3, DollarSign, Shield, Zap, Globe, ChevronRight, CheckCircle2, HeadphonesIcon, TrendingDown, PieChart } from "lucide-react";
+import { ArrowRight, TrendingUp, BarChart3, DollarSign, Shield, Zap, Globe, ChevronRight, CheckCircle2, HeadphonesIcon, PieChart, BookOpen, Brain, Activity, Target, Clock, LineChart } from "lucide-react";
 import { HeroSection } from "@/components/HeroSection";
-import { CoursesSection } from "@/components/CoursesSection";
 import { MentorSection } from "@/components/MentorSection";
 import { ResultsSection } from "@/components/ResultsSection";
 import { TestimonialsSection } from "@/components/TestimonialsSection";
@@ -10,7 +9,6 @@ import { FAQSection } from "@/components/FAQSection";
 import { LearningMap } from "@/components/LearningMap";
 import { MasterMarkets } from "@/components/MasterMarkets";
 import { MentorshipProgram } from "@/components/MentorshipProgram";
-import { STATIC_MARKET_DATA } from "@/hooks/use-market-data";
 import { motion, animate } from "framer-motion";
 import { useEffect, useRef } from "react";
 
@@ -60,7 +58,140 @@ const features = [
   },
 ];
 
-const marketOverview = STATIC_MARKET_DATA.filter(d => d.type === 'forex').slice(0, 6);
+const masterTopics = [
+  {
+    icon: TrendingUp,
+    title: "Price Action Trading",
+    outcome: "Read raw price movement like institutions. No indicators needed.",
+    tag: "Core Skill",
+    color: "text-blue-400",
+    bg: "bg-blue-500/10",
+    border: "group-hover:border-blue-500/40",
+  },
+  {
+    icon: Activity,
+    title: "Options Flow Analysis",
+    outcome: "Track smart money with live options data and unusual activity.",
+    tag: "Advanced",
+    color: "text-purple-400",
+    bg: "bg-purple-500/10",
+    border: "group-hover:border-purple-500/40",
+  },
+  {
+    icon: Shield,
+    title: "Risk Management",
+    outcome: "Protect your capital with proven position sizing and stop-loss rules.",
+    tag: "Essential",
+    color: "text-emerald-400",
+    bg: "bg-emerald-500/10",
+    border: "group-hover:border-emerald-500/40",
+  },
+  {
+    icon: Brain,
+    title: "Trading Psychology",
+    outcome: "Master emotions, eliminate FOMO, and trade with unshakeable discipline.",
+    tag: "Mindset",
+    color: "text-yellow-400",
+    bg: "bg-yellow-500/10",
+    border: "group-hover:border-yellow-500/40",
+  },
+  {
+    icon: BookOpen,
+    title: "Candlestick Patterns",
+    outcome: "25+ high-probability patterns for precise entries and exits.",
+    tag: "Foundation",
+    color: "text-cyan-400",
+    bg: "bg-cyan-500/10",
+    border: "group-hover:border-cyan-500/40",
+  },
+  {
+    icon: Globe,
+    title: "Forex Fundamentals",
+    outcome: "Trade news events and economic calendar releases profitably.",
+    tag: "Macro",
+    color: "text-pink-400",
+    bg: "bg-pink-500/10",
+    border: "group-hover:border-pink-500/40",
+  },
+  {
+    icon: Clock,
+    title: "Scalping Strategies",
+    outcome: "Fast, consistent profits with proven short-term trading setups.",
+    tag: "Strategy",
+    color: "text-orange-400",
+    bg: "bg-orange-500/10",
+    border: "group-hover:border-orange-500/40",
+  },
+  {
+    icon: LineChart,
+    title: "Live Market Analysis",
+    outcome: "Real-time trade calls, live coaching sessions every week.",
+    tag: "Live",
+    color: "text-red-400",
+    bg: "bg-red-500/10",
+    border: "group-hover:border-red-500/40",
+  },
+];
+
+function WhatYoullMasterSection() {
+  return (
+    <section className="py-24 bg-[#07101e] relative overflow-hidden">
+      <div className="absolute top-0 left-[30%] w-[600px] h-[400px] bg-blue-600/5 blur-[140px] rounded-full pointer-events-none" />
+      <div className="container mx-auto px-4 relative z-10">
+        <div className="text-center mb-16 max-w-2xl mx-auto">
+          <div className="flex items-center justify-center gap-2 text-blue-400 font-bold uppercase tracking-widest text-xs mb-4">
+            <div className="w-5 h-0.5 bg-blue-400" />
+            The Curriculum
+            <div className="w-5 h-0.5 bg-blue-400" />
+          </div>
+          <h2 className="text-3xl lg:text-5xl font-black text-white mb-4 leading-tight">
+            Skills That Make You <br />
+            <span className="bg-gradient-to-r from-blue-400 to-cyan-400 bg-clip-text text-transparent">A Profitable Trader</span>
+          </h2>
+          <p className="text-slate-400 text-lg">From zero to consistently profitable — every skill you need, taught by a NISM-certified professional with 8+ years of live market experience.</p>
+        </div>
+
+        <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-5">
+          {masterTopics.map((topic, i) => (
+            <motion.div
+              key={i}
+              initial={{ opacity: 0, y: 24 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              transition={{ delay: i * 0.07 }}
+              whileHover={{ y: -5 }}
+              className={`group relative p-6 rounded-2xl bg-white/[0.03] border border-white/[0.07] ${topic.border} hover:bg-white/[0.05] transition-all duration-300 cursor-default`}
+            >
+              <div className="flex items-start justify-between mb-5">
+                <div className={`w-12 h-12 ${topic.bg} rounded-xl flex items-center justify-center group-hover:scale-110 transition-transform`}>
+                  <topic.icon className={`w-6 h-6 ${topic.color}`} />
+                </div>
+                <span className={`text-[10px] font-black uppercase tracking-wider px-2.5 py-1 rounded-full ${topic.bg} ${topic.color}`}>
+                  {topic.tag}
+                </span>
+              </div>
+              <h3 className="text-base font-black text-white mb-2 leading-snug">{topic.title}</h3>
+              <p className="text-slate-500 text-sm leading-relaxed">{topic.outcome}</p>
+            </motion.div>
+          ))}
+        </div>
+
+        <div className="mt-14 flex flex-col sm:flex-row items-center justify-center gap-5">
+          <Link href="/education">
+            <button className="group px-8 py-4 bg-gradient-to-r from-blue-600 to-blue-500 hover:from-blue-500 hover:to-cyan-500 text-white font-black rounded-2xl shadow-xl shadow-blue-900/40 hover:scale-[1.03] transition-all flex items-center gap-2.5">
+              Start Learning Today
+              <ArrowRight className="w-5 h-5 group-hover:translate-x-1 transition-transform" />
+            </button>
+          </Link>
+          <div className="flex items-center gap-2 text-slate-400 text-sm">
+            <CheckCircle2 className="w-4 h-4 text-emerald-400" />
+            7-Day money-back guarantee
+          </div>
+        </div>
+      </div>
+    </section>
+  );
+}
 
 export default function Home() {
   return (
@@ -81,66 +212,8 @@ export default function Home() {
         </div>
       </section>
 
-      {/* ── MARKET OVERVIEW ── */}
-      <section className="py-20 bg-[#07101e] relative overflow-hidden">
-        <div className="absolute top-0 right-0 w-[600px] h-[600px] bg-blue-600/5 blur-[140px] rounded-full pointer-events-none" />
-        <div className="container mx-auto px-4 relative z-10">
-          <div className="flex flex-col md:flex-row md:items-end justify-between mb-12 gap-4">
-            <div>
-              <div className="flex items-center gap-2 text-blue-400 font-bold uppercase tracking-widest text-xs mb-3">
-                <div className="w-5 h-0.5 bg-blue-400" />
-                Live Market Data
-              </div>
-              <h2 className="text-3xl lg:text-4xl font-black text-white">Market Overview</h2>
-            </div>
-            <Link href="/markets">
-              <button className="flex items-center gap-2 text-blue-400 hover:text-blue-300 font-bold text-sm transition-colors group">
-                View All Markets
-                <ChevronRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
-              </button>
-            </Link>
-          </div>
-
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
-            {marketOverview.map((item, i) => (
-              <motion.div
-                key={item.symbol}
-                initial={{ opacity: 0, y: 20 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true }}
-                transition={{ delay: i * 0.07 }}
-                className="p-5 rounded-2xl bg-white/[0.03] border border-white/[0.07] hover:border-blue-500/30 hover:bg-white/[0.06] transition-all group cursor-pointer"
-              >
-                <div className="flex items-center justify-between mb-3">
-                  <div>
-                    <div className="font-black text-white text-sm tracking-wider">{item.symbol}</div>
-                    <div className="text-xs text-slate-500 mt-0.5">{item.name}</div>
-                  </div>
-                  <span className={`text-xs font-bold px-2.5 py-1 rounded-full ${item.change >= 0 ? 'bg-emerald-500/10 text-emerald-400' : 'bg-red-500/10 text-red-400'}`}>
-                    {item.change >= 0 ? '+' : ''}{item.change.toFixed(2)}%
-                  </span>
-                </div>
-                <div className="flex items-end justify-between">
-                  <div className={`font-mono font-black text-xl ${item.change >= 0 ? 'text-emerald-400' : 'text-red-400'}`}>
-                    {item.price < 10 ? item.price.toFixed(4) : item.price < 1000 ? item.price.toFixed(2) : item.price.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
-                  </div>
-                  <div className="flex items-center gap-1 text-slate-500">
-                    {item.change >= 0 ? <TrendingUp className="w-4 h-4 text-emerald-500" /> : <TrendingDown className="w-4 h-4 text-red-500" />}
-                    <span className="text-xs">{item.volume}</span>
-                  </div>
-                </div>
-              </motion.div>
-            ))}
-          </div>
-
-          <p className="text-center text-slate-600 text-xs mt-6 font-medium">
-            * Prices shown are indicative and for educational reference only.
-          </p>
-        </div>
-      </section>
-
-      {/* ── COURSES ── */}
-      <CoursesSection />
+      {/* ── WHAT YOU'LL MASTER ── */}
+      <WhatYoullMasterSection />
 
       {/* ── TRADING CONDITIONS ── */}
       <section className="py-24 bg-[#0b1627] relative overflow-hidden">

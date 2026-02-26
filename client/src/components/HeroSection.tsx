@@ -4,7 +4,7 @@ import { ArrowRight, Star, Users, TrendingUp, Award, Play, CheckCircle2 } from "
 
 export function HeroSection() {
   return (
-    <section className="relative min-h-screen flex items-center overflow-hidden bg-[#07101e]">
+    <section className="relative overflow-hidden bg-[#07101e]">
 
       {/* Video Background */}
       <div className="absolute inset-0 z-0">
@@ -27,7 +27,7 @@ export function HeroSection() {
       <div className="absolute top-[20%] right-[15%] w-[500px] h-[500px] bg-blue-600/15 blur-[120px] rounded-full z-0 pointer-events-none" />
       <div className="absolute bottom-[20%] left-[10%] w-[400px] h-[400px] bg-cyan-600/8 blur-[100px] rounded-full z-0 pointer-events-none" />
 
-      <div className="container mx-auto px-4 sm:px-6 lg:px-8 relative z-10 py-24 lg:py-32">
+      <div className="container mx-auto px-4 sm:px-6 lg:px-8 relative z-10 py-14 lg:py-20">
         <div className="grid lg:grid-cols-2 gap-16 lg:gap-20 items-center">
 
           {/* Left Content */}
